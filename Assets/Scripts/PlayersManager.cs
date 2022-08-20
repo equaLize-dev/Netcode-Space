@@ -13,7 +13,7 @@ public class PlayersManager : Singleton<PlayersManager>
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                Debug.Log($"{id} just connected...");
+                Debug.Log($"Player {id} just connected...");
                 _playersInGame.Value++;
             }
         };       
@@ -22,7 +22,7 @@ public class PlayersManager : Singleton<PlayersManager>
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                Debug.Log($"{id} just disconnected...");
+                Debug.Log($"Player {id} just disconnected...");
                 _playersInGame.Value--;
             }
         };

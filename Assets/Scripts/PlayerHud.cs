@@ -11,16 +11,7 @@ public class PlayerHud : NetworkBehaviour
      public override void OnNetworkSpawn()
      {
           _inputField = FindObjectOfType<TMP_InputField>();
-          
-          if (IsServer)
-          {
-               if (!string.IsNullOrEmpty(_playerName.Value))
-               {
-                    SetOverlay(_playerName.Value);
-                    overlaySet = true;
-               }
-          }
-          
+
           if (IsClient && IsOwner)
           {
                UpdateClientNicknameServerRpc(_inputField.text);

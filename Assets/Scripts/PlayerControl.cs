@@ -4,20 +4,12 @@ using UnityEngine;
 public class PlayerControl : NetworkBehaviour
 {
     [SerializeField] private float walkSpeed = 3.5f;
-    //[SerializeField] private Vector2 defaultPositionRange = new (-4, 4);
     [SerializeField] private NetworkVariable<float> forwardBackPosition = new();
     [SerializeField] private NetworkVariable<float> leftRightPosition = new();
     
     // client caching
     private float _oldForwardBackPosition;
     private float _oldleftRightBackPosition;
-
-    private void Start()
-    {
-        // transform.position = new Vector3(
-        //     Random.Range(defaultPositionRange.x, defaultPositionRange.y), 0,
-        //     Random.Range(defaultPositionRange.x, defaultPositionRange.y));
-    }
 
     private void Update()
     {
