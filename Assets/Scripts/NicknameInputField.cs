@@ -5,26 +5,36 @@ using UnityEngine.UI;
 public class NicknameInputField : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private Button continueButton;
+    [SerializeField] private Button[] continueButtons;
     [SerializeField] private int minCharacters;
     [SerializeField] private int maxCharacters;
 
     private void Start()
     {
-        inputField.onValueChanged.AddListener((value) =>
+        inputField.onValueChanged.AddListener(HandleInput);
+        HandleInput(inputField.text);
+    }
+
+    private void HandleInput(string input)
+    {
+        if (input.Length > maxCharacters)
         {
-            if (value.Length > maxCharacters)
-            {
-                inputField.text = inputField.text.Remove(inputField.text.Length - 1);
-            }
+            inputField.text = inputField.text.Remove(inputField.text.Length - 1);
+        }
             
-            if (value.Length < minCharacters)
+        if (input.Length < minCharacters)
+        {
+            foreach (var button in continueButtons)
             {
-                continueButton.interactable = false;
-                return;
+                button.interactable = false;
             }
+                
+            return;
+        }
             
-            continueButton.interactable = true;
-        } );
+        foreach (var button in continueButtons)
+        {
+            button.interactable = true;
+        }
     }
 }

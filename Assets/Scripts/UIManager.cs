@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private GameObject inputField;
     [SerializeField] private GameObject startHostButtonObj;
     [SerializeField] private GameObject startServerButtonObj;
     [SerializeField] private GameObject startClientButtonObj;
@@ -32,9 +33,7 @@ public class UIManager : MonoBehaviour
         {
             if (NetworkManager.Singleton.StartHost())
             {
-                startHostButtonObj.SetActive(false);
-                startServerButtonObj.SetActive(false);
-                startClientButtonObj.SetActive(false);
+                DisableUI();
                 Debug.Log("Host started...");
             }
 
@@ -48,9 +47,7 @@ public class UIManager : MonoBehaviour
         {
             if (NetworkManager.Singleton.StartServer())
             {
-                startHostButtonObj.SetActive(false);
-                startServerButtonObj.SetActive(false);
-                startClientButtonObj.SetActive(false);
+                DisableUI();
                 Debug.Log("Server started...");
             }
 
@@ -64,9 +61,7 @@ public class UIManager : MonoBehaviour
         {
             if (NetworkManager.Singleton.StartClient())
             {
-                startHostButtonObj.SetActive(false);
-                startServerButtonObj.SetActive(false);
-                startClientButtonObj.SetActive(false);
+                DisableUI();
                 Debug.Log("Client started...");
             }
 
@@ -75,5 +70,14 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("Client could not be started...");
             }
         });
+    }
+
+    private void DisableUI()
+    {
+        // Makes inputField invisible instead of disable it, because PlayerHud.cs takes player names from this inputField.
+        inputField.transform.SetParent(transform, worldPositionStays: false);
+        startHostButtonObj.SetActive(false);
+        startServerButtonObj.SetActive(false);
+        startClientButtonObj.SetActive(false);
     }
 }
