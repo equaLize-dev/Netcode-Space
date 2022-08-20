@@ -9,7 +9,7 @@ public class PlayersManager : Singleton<PlayersManager>
 
     private void Start()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback += (id) =>
+        NetworkManager.Singleton.OnClientConnectedCallback += id =>
         {
             if (NetworkManager.Singleton.IsServer)
             {
@@ -18,7 +18,7 @@ public class PlayersManager : Singleton<PlayersManager>
             }
         };       
         
-        NetworkManager.Singleton.OnClientDisconnectCallback += (id) =>
+        NetworkManager.Singleton.OnClientDisconnectCallback += id =>
         {
             if (NetworkManager.Singleton.IsServer)
             {
