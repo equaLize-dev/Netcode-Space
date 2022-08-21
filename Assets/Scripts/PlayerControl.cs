@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerControl : NetworkBehaviour
 {
-    [SerializeField] private float speed = 3.5f;
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float animationInterpolateMultiplier = 7f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
     [SerializeField] private NetworkVariable<Vector3> networkPositionDirection = new();
     [SerializeField] private NetworkVariable<float> forwardBackPosition = new();
@@ -13,12 +14,10 @@ public class PlayerControl : NetworkBehaviour
     private Animator _animator;
     private Vector3 _direction;
     
-    // client caching
     private Vector3 _oldInputPosition;
 
     private static readonly int s_VerticalMove = Animator.StringToHash("VerticalMove");
     private static readonly int s_HorizontalMove = Animator.StringToHash("HorizontalMove");
-    private static readonly int s_IsMove = Animator.StringToHash("IsMove");
 
     private void Awake()
     {
@@ -39,33 +38,23 @@ public class PlayerControl : NetworkBehaviour
 
     private void ClientInput()
     {
-        // player position and rotation input
         _direction.x = Input.GetAxis("Horizontal");
         _direction.z = Input.GetAxis("Vertical");
 
         if (_oldInputPosition != _direction)
         {
             _oldInputPosition = _direction;
-            UpdateClientPositionServerRpc(_direction * speed);
+            UpdateClientPositionServerRpc(_direction);
         }
         
-        // player state changes based on input
-        if (_direction.x != 0 || _direction.z != 0)
-        {
-            UpdatePlayerStateServerRpc(PlayerState.Move);
-        }
-        
-        else
-        {
-            UpdatePlayerStateServerRpc(PlayerState.Idle);
-        }
+        UpdatePlayerStateServerRpc(PlayerState.Move);
     }
 
     private void ClientMoveAndRotate()
     {
         if (networkPositionDirection.Value != Vector3.zero)
         {
-            _controller.Move(networkPositionDirection.Value * Time.deltaTime);
+            _controller.Move(networkPositionDirection.Value * (Time.deltaTime * speed));
         }
     }    
     
@@ -73,14 +62,17 @@ public class PlayerControl : NetworkBehaviour
     {
         if (networkPlayerState.Value == PlayerState.Move)
         {
-            //_animator.SetBool(s_IsMove, false);
-            _animator.SetFloat(s_HorizontalMove, _direction.x);
-            _animator.SetFloat(s_VerticalMove, _direction.z);
-        }
-        
-        else if (networkPlayerState.Value == PlayerState.Idle)
-        {
-            //_animator.SetBool(s_IsMove, true);
+            if (IsClient && IsOwner)
+            {
+                _animator.SetFloat(s_HorizontalMove, Mathf.Lerp(_animator.GetFloat(s_HorizontalMove),_direction.x, Time.deltaTime * animationInterpolateMultiplier));
+                _animator.SetFloat(s_VerticalMove, Mathf.Lerp(_animator.GetFloat(s_VerticalMove),_direction.z, Time.deltaTime * animationInterpolateMultiplier));
+            }
+
+            else
+            {
+                _animator.SetFloat(s_HorizontalMove, Mathf.Lerp(_animator.GetFloat(s_HorizontalMove),networkPositionDirection.Value.x, Time.deltaTime * animationInterpolateMultiplier));
+                _animator.SetFloat(s_VerticalMove, Mathf.Lerp(_animator.GetFloat(s_VerticalMove),networkPositionDirection.Value.z, Time.deltaTime * animationInterpolateMultiplier));
+            }
         }
     }
 
