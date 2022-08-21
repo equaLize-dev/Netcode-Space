@@ -7,8 +7,6 @@ public class PlayerControl : NetworkBehaviour
     [SerializeField] private float animationInterpolateMultiplier = 7f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
     [SerializeField] private NetworkVariable<Vector3> networkPositionDirection = new();
-    [SerializeField] private NetworkVariable<float> forwardBackPosition = new();
-    [SerializeField] private NetworkVariable<float> leftRightPosition = new();
 
     private CharacterController _controller;
     private Animator _animator;
@@ -64,14 +62,23 @@ public class PlayerControl : NetworkBehaviour
         {
             if (IsClient && IsOwner)
             {
-                _animator.SetFloat(s_HorizontalMove, Mathf.Lerp(_animator.GetFloat(s_HorizontalMove),_direction.x, Time.deltaTime * animationInterpolateMultiplier));
-                _animator.SetFloat(s_VerticalMove, Mathf.Lerp(_animator.GetFloat(s_VerticalMove),_direction.z, Time.deltaTime * animationInterpolateMultiplier));
+                _animator.SetFloat(s_HorizontalMove,
+                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), _direction.x,
+                        Time.deltaTime * animationInterpolateMultiplier));
+                
+                _animator.SetFloat(s_VerticalMove,
+                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), _direction.z,
+                        Time.deltaTime * animationInterpolateMultiplier));
             }
 
             else
             {
-                _animator.SetFloat(s_HorizontalMove, Mathf.Lerp(_animator.GetFloat(s_HorizontalMove),networkPositionDirection.Value.x, Time.deltaTime * animationInterpolateMultiplier));
-                _animator.SetFloat(s_VerticalMove, Mathf.Lerp(_animator.GetFloat(s_VerticalMove),networkPositionDirection.Value.z, Time.deltaTime * animationInterpolateMultiplier));
+                _animator.SetFloat(s_HorizontalMove,
+                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), networkPositionDirection.Value.x,
+                        Time.deltaTime * animationInterpolateMultiplier));
+                _animator.SetFloat(s_VerticalMove,
+                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), networkPositionDirection.Value.z,
+                        Time.deltaTime * animationInterpolateMultiplier));
             }
         }
     }
