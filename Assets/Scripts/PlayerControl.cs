@@ -1,14 +1,11 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerControl : NetworkBehaviour
 {
     [SerializeField] private float speed = 3.5f;
-    [SerializeField] private float rotationSpeed = 1.5f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
     [SerializeField] private NetworkVariable<Vector3> networkPositionDirection = new();
-    //[SerializeField] private NetworkVariable<Vector3> networkRotationDirection = new();
     [SerializeField] private NetworkVariable<float> forwardBackPosition = new();
     [SerializeField] private NetworkVariable<float> leftRightPosition = new();
 
@@ -18,10 +15,10 @@ public class PlayerControl : NetworkBehaviour
     
     // client caching
     private Vector3 _oldInputPosition;
-    //private Vector3 _oldInputRotation;
 
     private static readonly int s_VerticalMove = Animator.StringToHash("VerticalMove");
-    private static readonly int s_Idle = Animator.StringToHash("Idle");
+    private static readonly int s_HorizontalMove = Animator.StringToHash("HorizontalMove");
+    private static readonly int s_IsMove = Animator.StringToHash("IsMove");
 
     private void Awake()
     {
@@ -76,12 +73,14 @@ public class PlayerControl : NetworkBehaviour
     {
         if (networkPlayerState.Value == PlayerState.Move)
         {
-            _animator.SetFloat(s_VerticalMove, 1);
+            //_animator.SetBool(s_IsMove, false);
+            _animator.SetFloat(s_HorizontalMove, _direction.x);
+            _animator.SetFloat(s_VerticalMove, _direction.z);
         }
         
         else if (networkPlayerState.Value == PlayerState.Idle)
         {
-            _animator.SetFloat(s_VerticalMove, 0);
+            //_animator.SetBool(s_IsMove, true);
         }
     }
 
