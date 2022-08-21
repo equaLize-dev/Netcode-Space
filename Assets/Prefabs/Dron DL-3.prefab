@@ -1305,12 +1305,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7547528765626385949}
   - component: {fileID: 5884444149068572408}
+  - component: {fileID: 2654973520202662027}
   - component: {fileID: 6321117116516530326}
   - component: {fileID: 8655445499060509133}
   - component: {fileID: 4869757055772859061}
   - component: {fileID: 6247058678953210493}
   - component: {fileID: 3569204040738013495}
   - component: {fileID: 2309784723200808556}
+  - component: {fileID: -6337023447250142837}
   m_Layer: 0
   m_Name: Dron DL-3
   m_TagString: Untagged
@@ -1345,13 +1347,26 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1
-  m_Radius: 0.59
+  m_Height: 0.07
+  m_Radius: 0.38
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.31, z: 0}
+--- !u!65 &2654973520202662027
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7547528765626385950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1763654, y: 0.5370524, z: 0.974805}
+  m_Center: {x: 0.000000029802322, y: 0.3196684, z: -0.10078031}
 --- !u!95 &6321117116516530326
 Animator:
   serializedVersion: 4
@@ -1439,11 +1454,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932d691fb08fd6e46bfb8464e00e2757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.025
-  forwardBackPosition:
+  speed: 2
+  animationInterpolateMultiplier: 7
+  networkPlayerState:
     m_InternalValue: 0
-  leftRightPosition:
-    m_InternalValue: 0
+  networkPositionDirection:
+    m_InternalValue: {x: 0, y: 0, z: 0}
 --- !u!114 &2309784723200808556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1456,6 +1472,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec09aeedbd5e4094b576951723f88559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6337023447250142837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7547528765626385950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1e057faf00450a84de7b1713f28781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnDelay: 3
 --- !u!1 &7972194288378463645
 GameObject:
   m_ObjectHideFlags: 0

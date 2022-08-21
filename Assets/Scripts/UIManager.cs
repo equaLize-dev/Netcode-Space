@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartHost())
             {
                 DisableUI();
+                playersInGameText.gameObject.SetActive(true);
                 Debug.Log("Host started...");
             }
 
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartServer())
             {
                 DisableUI();
+                playersInGameText.gameObject.SetActive(true);
                 Debug.Log("Server started...");
             }
 
@@ -62,6 +64,7 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartClient())
             {
                 DisableUI();
+                playersInGameText.gameObject.SetActive(true);
                 Debug.Log("Client started...");
             }
 
