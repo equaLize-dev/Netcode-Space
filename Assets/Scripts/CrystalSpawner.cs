@@ -2,7 +2,8 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CrystalSpawner : Singleton<CrystalSpawner>
+//TODO: Refactoring.
+public class CrystalSpawner : NetworkSingleton<CrystalSpawner>
 {
     [SerializeField] private NetworkObject crystalPrefab;
     [SerializeField] private Transform crystalSpawnArea;
@@ -12,17 +13,36 @@ public class CrystalSpawner : Singleton<CrystalSpawner>
     [Tooltip("Objects will spawn without changing the Y-axis if enabled.")]
     [SerializeField] private bool spawnOnlyXZ;
 
+    private NetworkVariable<int> _awailableCrystalsCount = new();
+    private NetworkVariable<bool> _isAllCrystalsSpawned = new();
+
     private int _spawns;
     private float _time;
     private bool _readyToSpawn;
 
     public void Spawn()
     {
+        if(!NetworkManager.Singleton.IsServer) return;
         _readyToSpawn = true;
     }
 
+    public void DecreaseSpawnedCrystalsCount(int decrease)
+    {
+        if(!NetworkManager.Singleton.IsServer) return;
+        _awailableCrystalsCount.Value -= decrease;
+        if (_awailableCrystalsCount.Value == 0 && _isAllCrystalsSpawned.Value)
+        {
+            foreach (var player in FindObjectsOfType<PlayerControl>())
+            {
+                player.GetComponent<NetworkObject>().Despawn();
+            }
+        }
+    }
+
+    //TODO: Use async void (Task) instead.
     private void Update()
     {
+        if(!NetworkManager.Singleton.IsServer) return;
         if (!_readyToSpawn) return;
         
         if (_time >= spawnDelay)
@@ -33,19 +53,21 @@ public class CrystalSpawner : Singleton<CrystalSpawner>
                 crystal.transform.position = crystalSpawnArea.position;
                 crystal.transform.position += RandomPosition(crystalSpawnArea.localScale);
                 crystal.Spawn();
+                _awailableCrystalsCount.Value++;
                 _spawns++;
                 _time = 0;
-            }
-
-            else
-            {
-                _readyToSpawn = false;
             }
         }
 
         else
         {
             _time += Time.deltaTime;
+        }
+
+        if (_spawns == spawnCount)
+        {
+            _readyToSpawn = false;
+            _isAllCrystalsSpawned.Value = true;
         }
     }
 

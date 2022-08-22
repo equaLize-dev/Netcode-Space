@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
+//TODO: Refactoring.
+//TODO: Split for different classes: SRP is seriously violated.
 public class PlayerCollider : NetworkBehaviour
 {
     [SerializeField] private int respawnDelay;
@@ -34,10 +36,11 @@ public class PlayerCollider : NetworkBehaviour
 
         else if (other.CompareTag("Crystal"))
         {
-            if (IsServer)
+            if ( NetworkManager.Singleton.IsServer)
             {
                 score.Value += 1;
                 other.GetComponent<NetworkObject>().Despawn();
+                CrystalSpawner.Instance.DecreaseSpawnedCrystalsCount(1);
             }
         }
     }
