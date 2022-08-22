@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
@@ -32,15 +31,14 @@ public class PlayerCollider : NetworkBehaviour
             Task.Run(() => respawn, tokenSource.Token);
             gameObject.SetActive(false);
         }
-        
+
         else if (other.CompareTag("Crystal"))
         {
-            if (IsClient && IsOwner)
+            if (IsServer)
             {
-                AddPlayerScoreServerRpc(1);
+                score.Value += 1;
+                other.GetComponent<NetworkObject>().Despawn();
             }
-
-            Destroy(other.gameObject);
         }
     }
 
@@ -51,11 +49,5 @@ public class PlayerCollider : NetworkBehaviour
         gameObject.transform.position = Vector3.zero;
         gameObject.SetActive(true);
         linkedTokenSource.Dispose();
-    }
-
-    [ServerRpc]
-    private void AddPlayerScoreServerRpc(int value)
-    {
-        score.Value += value;
     }
 }
