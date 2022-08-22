@@ -11,9 +11,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startClientButtonObj;
     [SerializeField] private TextMeshProUGUI playersInGameText;
     [SerializeField] private TextMeshProUGUI playerScoreText;
+    [SerializeField] private Button spawnCrystalsButton;
     private Button startHostButton;
     private Button startServerButton;
     private Button startClientButton;
+    private bool _isServerStaretd;
 
     public void UpdatePlayerScore(int score)
     {
@@ -42,6 +44,7 @@ public class UIManager : MonoBehaviour
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
                 playerScoreText.gameObject.SetActive(true);
+                _isServerStaretd = true;
                 Debug.Log("Host started...");
             }
 
@@ -58,6 +61,7 @@ public class UIManager : MonoBehaviour
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
                 playerScoreText.gameObject.SetActive(true);
+                _isServerStaretd = true;
                 Debug.Log("Server started...");
             }
 
@@ -74,12 +78,21 @@ public class UIManager : MonoBehaviour
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
                 playerScoreText.gameObject.SetActive(true);
+                _isServerStaretd = true;
                 Debug.Log("Client started...");
             }
 
             else
             {
                 Debug.LogError("Client could not be started...");
+            }
+        });
+        
+        spawnCrystalsButton.onClick.AddListener(() =>
+        {
+            if (_isServerStaretd)
+            {
+                CrystalSpawner.Instance.Spawn();
             }
         });
     }
