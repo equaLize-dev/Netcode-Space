@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Camera
   - SolidObject
+  - Crystal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcess
   - Water
   - UI
   - 

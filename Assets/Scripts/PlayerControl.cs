@@ -30,7 +30,7 @@ public class PlayerControl : NetworkBehaviour
             ClientInput();
         }
         
-        ClientMoveAndRotate();
+        ClientMove();
         ClientVisuals();
     }
 
@@ -48,7 +48,7 @@ public class PlayerControl : NetworkBehaviour
         UpdatePlayerStateServerRpc(PlayerState.Move);
     }
 
-    private void ClientMoveAndRotate()
+    private void ClientMove()
     {
         if (networkPositionDirection.Value != Vector3.zero)
         {
@@ -76,6 +76,7 @@ public class PlayerControl : NetworkBehaviour
                 _animator.SetFloat(s_HorizontalMove,
                     Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), networkPositionDirection.Value.x,
                         Time.deltaTime * animationInterpolateMultiplier));
+                
                 _animator.SetFloat(s_VerticalMove,
                     Mathf.Lerp(_animator.GetFloat(s_VerticalMove), networkPositionDirection.Value.z,
                         Time.deltaTime * animationInterpolateMultiplier));
@@ -90,7 +91,7 @@ public class PlayerControl : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void UpdatePlayerStateServerRpc(PlayerState newState)
+    private void UpdatePlayerStateServerRpc(PlayerState newState)
     {
         networkPlayerState.Value = newState;
     }

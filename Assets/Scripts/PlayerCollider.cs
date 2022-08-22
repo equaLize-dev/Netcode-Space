@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,6 +7,21 @@ using UnityEngine;
 public class PlayerCollider : NetworkBehaviour
 {
     [SerializeField] private int respawnDelay;
+    private readonly NetworkVariable<int> score = new();
+    private UIManager _uiManager;
+
+    private void Start()
+    {
+        _uiManager = FindObjectOfType<UIManager>();
+    }
+
+    private void Update()
+    {
+        if (IsClient && IsOwner) //TODO: Replace without Update()
+        {
+            _uiManager.UpdatePlayerScore(score.Value);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +32,16 @@ public class PlayerCollider : NetworkBehaviour
             Task.Run(() => respawn, tokenSource.Token);
             gameObject.SetActive(false);
         }
+        
+        else if (other.CompareTag("Crystal"))
+        {
+            if (IsClient && IsOwner)
+            {
+                AddPlayerScoreServerRpc(1);
+            }
+
+            Destroy(other.gameObject);
+        }
     }
 
     private async Task RespawnAsync(int delay, CancellationToken token)
@@ -25,5 +51,11 @@ public class PlayerCollider : NetworkBehaviour
         gameObject.transform.position = Vector3.zero;
         gameObject.SetActive(true);
         linkedTokenSource.Dispose();
+    }
+
+    [ServerRpc]
+    private void AddPlayerScoreServerRpc(int value)
+    {
+        score.Value += value;
     }
 }

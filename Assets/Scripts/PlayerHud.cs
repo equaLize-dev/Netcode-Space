@@ -19,7 +19,7 @@ public class PlayerHud : NetworkBehaviour
           }
      }
 
-     public void SetOverlay(string text)
+     private void SetOverlay(string text)
      {
           var localPlayerOverlay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
           localPlayerOverlay.text = text;
@@ -35,7 +35,7 @@ public class PlayerHud : NetworkBehaviour
      }
 
      [ServerRpc]
-     public void UpdateClientNicknameServerRpc(string nickname)
+     private void UpdateClientNicknameServerRpc(string nickname)
      {
           _playerName.Value = nickname;
      }

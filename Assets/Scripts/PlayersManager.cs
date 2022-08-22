@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayersManager : Singleton<PlayersManager>
@@ -26,7 +27,5 @@ public class PlayersManager : Singleton<PlayersManager>
                 _playersInGame.Value--;
             }
         };
-        
-        
     }
 }

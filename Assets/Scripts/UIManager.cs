@@ -10,9 +10,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startServerButtonObj;
     [SerializeField] private GameObject startClientButtonObj;
     [SerializeField] private TextMeshProUGUI playersInGameText;
+    [SerializeField] private TextMeshProUGUI playerScoreText;
     private Button startHostButton;
     private Button startServerButton;
     private Button startClientButton;
+
+    public void UpdatePlayerScore(int score)
+    {
+        playerScoreText.text = $"Cyber-crystals : {score}";
+    }
 
     private void Awake()
     {
@@ -35,6 +41,7 @@ public class UIManager : MonoBehaviour
             {
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
+                playerScoreText.gameObject.SetActive(true);
                 Debug.Log("Host started...");
             }
 
@@ -50,6 +57,7 @@ public class UIManager : MonoBehaviour
             {
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
+                playerScoreText.gameObject.SetActive(true);
                 Debug.Log("Server started...");
             }
 
@@ -65,6 +73,7 @@ public class UIManager : MonoBehaviour
             {
                 DisableUI();
                 playersInGameText.gameObject.SetActive(true);
+                playerScoreText.gameObject.SetActive(true);
                 Debug.Log("Client started...");
             }
 
