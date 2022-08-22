@@ -23,30 +23,29 @@ public class CrystalSpawner : Singleton<CrystalSpawner>
 
     private void Update()
     {
-        if (_readyToSpawn)
+        if (!_readyToSpawn) return;
+        
+        if (_time >= spawnDelay)
         {
-            if (_time >= spawnDelay)
+            if (_spawns < spawnCount)
             {
-                if (_spawns < spawnCount)
-                {
-                    NetworkObject crystal = Instantiate(crystalPrefab);
-                    crystal.transform.position = crystalSpawnArea.position;
-                    crystal.transform.position += RandomPosition(crystalSpawnArea.localScale);
-                    crystal.Spawn();
-                    _spawns++;
-                    _time = 0;
-                }
-
-                else
-                {
-                    _readyToSpawn = false;
-                }
+                NetworkObject crystal = Instantiate(crystalPrefab);
+                crystal.transform.position = crystalSpawnArea.position;
+                crystal.transform.position += RandomPosition(crystalSpawnArea.localScale);
+                crystal.Spawn();
+                _spawns++;
+                _time = 0;
             }
 
             else
             {
-                _time += Time.deltaTime;
+                _readyToSpawn = false;
             }
+        }
+
+        else
+        {
+            _time += Time.deltaTime;
         }
     }
 
