@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NicknameInputField : MonoBehaviour
+public sealed class NicknameInputField : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Button[] continueButtons;

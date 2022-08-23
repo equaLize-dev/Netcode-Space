@@ -1,15 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CameraLobbyRotation : MonoBehaviour
+public sealed class CameraLobbyRotation : MonoBehaviour
 {
     private Vector3 _startupPosition;
     private Quaternion _startupRotation;
 
     public void Disable()
     {
-        transform.position = _startupPosition;
-        transform.rotation = _startupRotation;
+        transform.SetPositionAndRotation(_startupPosition, _startupRotation);
         enabled = false;
     }
 

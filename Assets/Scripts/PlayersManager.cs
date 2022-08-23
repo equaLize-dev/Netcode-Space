@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 
-public class PlayersManager : NetworkSingleton<PlayersManager>
+public sealed class PlayersManager : NetworkSingleton<PlayersManager>
 {
     private NetworkVariable<int> _playersInGame = new();
 

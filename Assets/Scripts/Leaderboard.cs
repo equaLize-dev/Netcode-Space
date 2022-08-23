@@ -1,14 +1,16 @@
-using System.Linq;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Leaderboard : Singleton<Leaderboard>
+public sealed class Leaderboard : MonoBehaviour
 {
+    [SerializeField] private GameObject leaderboard;
     [SerializeField] private TMP_Text[] winnersText;
 
-    public void ShowLeaderboard()
+    public void ShowLeaderboard(PlayerScore[] winners)
     {
-        PlayerCollider[] winners = FindObjectsOfType<PlayerCollider>().OrderByDescending(player => player.Score.Value).ToArray();
+        leaderboard.SetActive(true);
+
         if (winners.Length > 0)
         {
             for (var i = 0; i < winners.Length; i++)

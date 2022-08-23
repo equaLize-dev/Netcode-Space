@@ -138,22 +138,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1425489508226866, guid: 092df013ff76bd7428d419529e5e81cc, type: 3}
   m_PrefabInstance: {fileID: 671048411043547501}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &1118168597400378769
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672472859986337375}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 2
 --- !u!65 &1217566780403211937
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -162,7 +146,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 672472859986337375}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.0340624, y: 4.579947, z: 3.305273}
@@ -209,3 +193,16 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-325588539188725417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672472859986337375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51299602785e4670bd92d630a2e74cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 1

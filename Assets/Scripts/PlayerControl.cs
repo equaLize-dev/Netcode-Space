@@ -1,9 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-//TODO: Refactoring.
-//TODO: Fix animation interpolate.
-public class PlayerControl : NetworkBehaviour
+public sealed class PlayerControl : NetworkBehaviour
 {
     [SerializeField] private float speed = 2f;
     [SerializeField] private float animationInterpolateMultiplier = 7f;

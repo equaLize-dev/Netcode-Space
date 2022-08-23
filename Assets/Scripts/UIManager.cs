@@ -12,9 +12,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playersInGameText;
     [SerializeField] private TextMeshProUGUI playerScoreText;
     [SerializeField] private Button spawnCrystalsButton;
-    private Button startHostButton;
-    private Button startServerButton;
-    private Button startClientButton;
+    private Button _startHostButton;
+    private Button _startServerButton;
+    private Button _startClientButton;
     private bool _isServerStaretd;
 
     public void UpdatePlayerScore(int score)
@@ -24,9 +24,9 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        startHostButton = startHostButtonObj.GetComponentInChildren<Button>();
-        startServerButton = startServerButtonObj.GetComponentInChildren<Button>();
-        startClientButton = startClientButtonObj.GetComponentInChildren<Button>();
+        _startHostButton = startHostButtonObj.GetComponentInChildren<Button>();
+        _startServerButton = startServerButtonObj.GetComponentInChildren<Button>();
+        _startClientButton = startClientButtonObj.GetComponentInChildren<Button>();
         Cursor.visible = true;
     }
 
@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        startHostButton.onClick.AddListener(() =>
+        _startHostButton.onClick.AddListener(() =>
         {
             if (NetworkManager.Singleton.StartHost())
             {
@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
             }
         });        
         
-        startServerButton.onClick.AddListener(() =>
+        _startServerButton.onClick.AddListener(() =>
         {
             if (NetworkManager.Singleton.StartServer())
             {
@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
             }
         });   
         
-        startClientButton.onClick.AddListener(() =>
+        _startClientButton.onClick.AddListener(() =>
         {
             if (NetworkManager.Singleton.StartClient())
             {

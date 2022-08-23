@@ -1,12 +1,11 @@
 ﻿using TMPro;
 using Unity.Netcode;
-using UnityEngine;
 
-public class PlayerHud : NetworkBehaviour
+public sealed class PlayerHud : NetworkBehaviour
 {
      private NetworkVariable<NetworkString> _playerName = new();
      private TMP_InputField _inputField;
-     private bool overlaySet;
+     private bool _overlaySet;
 
      public override void OnNetworkSpawn()
      {
@@ -28,10 +27,10 @@ public class PlayerHud : NetworkBehaviour
 
      private void Update()
      {
-          if (!overlaySet && !string.IsNullOrEmpty(_playerName.Value))
+          if (!_overlaySet && !string.IsNullOrEmpty(_playerName.Value))
           {
                SetOverlay(_playerName.Value);
-               overlaySet = true;
+               _overlaySet = true;
           }
      }
 

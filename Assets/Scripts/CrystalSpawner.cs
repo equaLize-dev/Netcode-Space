@@ -1,104 +1,66 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-//TODO: Refactoring.
-public class CrystalSpawner : NetworkSingleton<CrystalSpawner>
+public sealed class CrystalSpawner : NetworkSingleton<CrystalSpawner>
 {
     [SerializeField] private NetworkObject crystalPrefab;
     [SerializeField] private Transform crystalSpawnArea;
     [SerializeField] private int spawnDelay;
     [SerializeField] private int spawnCount;
-
+    
     [Tooltip("Objects will spawn without changing the Y-axis if enabled.")]
     [SerializeField] private bool spawnOnlyXZ;
 
-    [SerializeField] private GameObject leaderboard;
+    public NetworkVariable<int> CurrentCrystalsCount { get; } = new();
+    public NetworkVariable<bool> IsAllCrystalsSpawned { get; } = new();
 
-    private NetworkVariable<int> _awailableCrystalsCount = new();
-    private NetworkVariable<bool> _isAllCrystalsSpawned = new();
-
+    private Action OnUpdate;
     private int _spawns;
     private float _time;
-    private bool _readyToSpawn;
-
+    
     public void Spawn()
     {
-        if(!NetworkManager.Singleton.IsServer) return;
-        _readyToSpawn = true;
-    }
-
-    public void DecreaseSpawnedCrystalsCount(int decrease)
-    {
-        if(!NetworkManager.Singleton.IsServer) return;
-        _awailableCrystalsCount.Value -= decrease;
-    }
-
-    //TODO: Use async void (Task) instead.
-    private void Update()
-    {
-        if (_awailableCrystalsCount.Value == 0 && _isAllCrystalsSpawned.Value)
+        OnUpdate = delegate
         {
-            if (!leaderboard.gameObject.activeSelf)
-            {
-                leaderboard.SetActive(true);
-                Leaderboard.Instance.ShowLeaderboard();
-                
-                // foreach (var player in FindObjectsOfType<PlayerControl>())
-                // {
-                //     if (NetworkManager.Singleton.IsServer)
-                //     {
-                //         player.GetComponent<NetworkObject>().Despawn();
-                //     }
-                // }
-            }
-        }
-        
-        if(!NetworkManager.Singleton.IsServer) return;
-        if (!_readyToSpawn) return;
-        
-        if (_time >= spawnDelay)
-        {
-            if (_spawns < spawnCount)
+            if (!IsServer) return;
+
+            if (_time >= spawnDelay)
             {
                 NetworkObject crystal = Instantiate(crystalPrefab);
-                crystal.transform.position = crystalSpawnArea.position;
-                crystal.transform.position += RandomPosition(crystalSpawnArea.localScale);
+                crystal.transform.position = crystalSpawnArea.position + RandomPosition(crystalSpawnArea.localScale);
                 crystal.Spawn();
-                _awailableCrystalsCount.Value++;
+                CurrentCrystalsCount.Value++;
                 _spawns++;
                 _time = 0;
+
+                if (_spawns == spawnCount)
+                {
+                    IsAllCrystalsSpawned.Value = true;
+                    enabled = false;
+                }
             }
-        }
 
-        else
-        {
-            _time += Time.deltaTime;
-        }
-
-        if (_spawns == spawnCount)
-        {
-            _readyToSpawn = false;
-            _isAllCrystalsSpawned.Value = true;
-        }
+            else
+            {
+                _time += Time.deltaTime;
+            }
+        };
     }
+
+    private void Update()
+    {
+        OnUpdate?.Invoke();
+    }
+    
 
     private Vector3 RandomPosition(Vector3 areaScale)
     {
-        if (!spawnOnlyXZ)
-        {
-            return new Vector3
-            {
-                x = Random.Range(-(areaScale.x / 2f), areaScale.x / 2f),
-                y = Random.Range(-(areaScale.y / 2f), areaScale.y / 2f),
-                z = Random.Range(-(areaScale.z / 2f), areaScale.z / 2f)
-            };
-        }
-
         return new Vector3
         {
             x = Random.Range(-(areaScale.x / 2f), areaScale.x / 2f),
-            y = 0f,
+            y = spawnOnlyXZ ? 0 : Random.Range(-(areaScale.y / 2f), areaScale.y / 2f),
             z = Random.Range(-(areaScale.z / 2f), areaScale.z / 2f)
         };
     }
