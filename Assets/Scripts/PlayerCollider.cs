@@ -1,14 +1,16 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
 //TODO: Refactoring.
 //TODO: Split for different classes: SRP is seriously violated.
-public class PlayerCollider : NetworkBehaviour
+public class PlayerCollider : NetworkBehaviour, IComparable<int>
 {
     [SerializeField] private int respawnDelay;
-    private readonly NetworkVariable<int> score = new();
+    public NetworkVariable<int> Score { get; } = new();
     private UIManager _uiManager;
 
     private void Start()
@@ -20,7 +22,7 @@ public class PlayerCollider : NetworkBehaviour
     {
         if (IsClient && IsOwner) //TODO: Replace without Update()
         {
-            _uiManager.UpdatePlayerScore(score.Value);
+            _uiManager.UpdatePlayerScore(Score.Value);
         }
     }
 
@@ -38,7 +40,7 @@ public class PlayerCollider : NetworkBehaviour
         {
             if ( NetworkManager.Singleton.IsServer)
             {
-                score.Value += 1;
+                Score.Value += 1;
                 other.GetComponent<NetworkObject>().Despawn();
                 CrystalSpawner.Instance.DecreaseSpawnedCrystalsCount(1);
             }
@@ -52,5 +54,20 @@ public class PlayerCollider : NetworkBehaviour
         gameObject.transform.position = Vector3.zero;
         gameObject.SetActive(true);
         linkedTokenSource.Dispose();
+    }
+
+    public int CompareTo(int other)
+    {
+        if (Score.Value < other)
+        {
+            return -1;
+        }
+
+        if (Score.Value == other)
+        {
+            return 0;
+        }
+
+        return 1;
     }
 }

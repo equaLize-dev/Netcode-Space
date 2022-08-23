@@ -21,6 +21,7 @@ public class PlayerHud : NetworkBehaviour
 
      private void SetOverlay(string text)
      {
+          gameObject.name = text;
           var localPlayerOverlay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
           localPlayerOverlay.text = text;
      }

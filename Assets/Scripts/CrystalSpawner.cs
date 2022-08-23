@@ -13,6 +13,8 @@ public class CrystalSpawner : NetworkSingleton<CrystalSpawner>
     [Tooltip("Objects will spawn without changing the Y-axis if enabled.")]
     [SerializeField] private bool spawnOnlyXZ;
 
+    [SerializeField] private GameObject leaderboard;
+
     private NetworkVariable<int> _awailableCrystalsCount = new();
     private NetworkVariable<bool> _isAllCrystalsSpawned = new();
 
@@ -30,18 +32,28 @@ public class CrystalSpawner : NetworkSingleton<CrystalSpawner>
     {
         if(!NetworkManager.Singleton.IsServer) return;
         _awailableCrystalsCount.Value -= decrease;
-        if (_awailableCrystalsCount.Value == 0 && _isAllCrystalsSpawned.Value)
-        {
-            foreach (var player in FindObjectsOfType<PlayerControl>())
-            {
-                player.GetComponent<NetworkObject>().Despawn();
-            }
-        }
     }
 
     //TODO: Use async void (Task) instead.
     private void Update()
     {
+        if (_awailableCrystalsCount.Value == 0 && _isAllCrystalsSpawned.Value)
+        {
+            if (!leaderboard.gameObject.activeSelf)
+            {
+                leaderboard.SetActive(true);
+                Leaderboard.Instance.ShowLeaderboard();
+                
+                // foreach (var player in FindObjectsOfType<PlayerControl>())
+                // {
+                //     if (NetworkManager.Singleton.IsServer)
+                //     {
+                //         player.GetComponent<NetworkObject>().Despawn();
+                //     }
+                // }
+            }
+        }
+        
         if(!NetworkManager.Singleton.IsServer) return;
         if (!_readyToSpawn) return;
         
