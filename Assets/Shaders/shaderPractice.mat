@@ -73,8 +73,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Height: 0.3
+    - _Intencity: 2.15
     - _Metallic: 0
-    - _MixValue: 0.54
+    - _MixValue: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02

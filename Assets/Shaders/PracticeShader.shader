@@ -6,6 +6,7 @@ Shader "Custom/UnlitTextureMix"
         _Tex2 ("Texture 2", 2D) = "white" {} 
         _MixValue("Mix Value", Range(0,1)) = 0.5 
         _Color("Main Color", COLOR) = (1,1,1,1) 
+        _Intencity ("Displacement intensity", Range(0, 20)) = 0.5
     }
     
     SubShader
@@ -26,6 +27,7 @@ Shader "Custom/UnlitTextureMix"
             float4 _Tex2_ST;
             float _MixValue;
             float4 _Color;
+            float _Intencity;
             
             struct VectorToFragment
             {
@@ -35,6 +37,8 @@ Shader "Custom/UnlitTextureMix"
 
             VectorToFragment vert (appdata_full v)
             {
+                v.vertex.y -= _Intencity;
+                v.vertex.xyz += sin(v.normal * _Intencity * v.texcoord + v.texcoord);
                 VectorToFragment result;
                 result.vertex = UnityObjectToClipPos(v.vertex);
                 result.uv = TRANSFORM_TEX(v.texcoord, _Tex1);
