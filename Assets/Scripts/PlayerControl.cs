@@ -6,7 +6,7 @@ public sealed class PlayerControl : NetworkBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private float animationInterpolateMultiplier = 7f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
-    [SerializeField] private NetworkVariable<Vector3> networkPositionDirection = new();
+    [SerializeField] private NetworkVariable<Vector3> networkPlayerPosition = new();
 
     private CharacterController _controller;
     private Animator _animator;
@@ -16,6 +16,11 @@ public sealed class PlayerControl : NetworkBehaviour
 
     private static readonly int s_VerticalMove = Animator.StringToHash("VerticalMove");
     private static readonly int s_HorizontalMove = Animator.StringToHash("HorizontalMove");
+
+    public Vector3 NetworkPlayerPosition
+    {
+        set => networkPlayerPosition.Value = value;
+    }
 
     private void Awake()
     {
@@ -50,9 +55,9 @@ public sealed class PlayerControl : NetworkBehaviour
 
     private void ClientMove()
     {
-        if (networkPositionDirection.Value != Vector3.zero)
+        if (networkPlayerPosition.Value != Vector3.zero)
         {
-            _controller.Move(networkPositionDirection.Value * (Time.deltaTime * speed));
+            _controller.Move(networkPlayerPosition.Value * (Time.deltaTime * speed));
         }
     }    
     
@@ -74,11 +79,11 @@ public sealed class PlayerControl : NetworkBehaviour
             else
             {
                 _animator.SetFloat(s_HorizontalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), networkPositionDirection.Value.x,
+                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), networkPlayerPosition.Value.x,
                         Time.deltaTime * animationInterpolateMultiplier));
                 
                 _animator.SetFloat(s_VerticalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), networkPositionDirection.Value.z,
+                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), networkPlayerPosition.Value.z,
                         Time.deltaTime * animationInterpolateMultiplier));
             }
         }
@@ -87,7 +92,7 @@ public sealed class PlayerControl : NetworkBehaviour
     [ServerRpc]
     private void UpdateClientPositionServerRpc(Vector3 newPositionDirection)
     {
-        networkPositionDirection.Value = newPositionDirection;
+        networkPlayerPosition.Value = newPositionDirection;
     }
 
     [ServerRpc]

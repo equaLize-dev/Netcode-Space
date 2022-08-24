@@ -11,7 +11,7 @@ public sealed class SolidObject : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            if (other.TryGetComponent<NetworkObject>(out var player))
+            if (other.TryGetComponent<PlayerControl>(out var player))
             {
                 var tokenSource = new CancellationTokenSource();
                 Task respawn = RespawnPlayerAsync(player, respawnDelay, tokenSource.Token);
@@ -20,14 +20,16 @@ public sealed class SolidObject : MonoBehaviour
         }
     }
     
-    private async Task RespawnPlayerAsync(NetworkObject player, int delay, CancellationToken token)
+    private async Task RespawnPlayerAsync(PlayerControl player, int delay, CancellationToken token)
     {
         using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
-        NetworkObject respawnedPlayer = Instantiate(player);
+        player.NetworkPlayerPosition = Vector3.zero;
+        NetworkObject networkPlayer = player.GetComponent<NetworkObject>();
+        NetworkObject respawnedPlayer = Instantiate(networkPlayer);
         ulong clientId = player.OwnerClientId;
         respawnedPlayer.transform.position = Vector3.zero;
         respawnedPlayer.gameObject.SetActive(false);
-        player.Despawn();
+        networkPlayer.Despawn();
         await Task.Delay(delay * 1000, token);
         respawnedPlayer.gameObject.SetActive(true);
         respawnedPlayer.SpawnWithOwnership(clientId);
