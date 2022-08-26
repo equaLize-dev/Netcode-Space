@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -26,6 +27,13 @@ public sealed class PlayerControl : NetworkBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        var cam = FindObjectOfType<CameraControl>();
+        cam.Parent = transform;
+        cam.enabled = true;
     }
 
     private void Update()
