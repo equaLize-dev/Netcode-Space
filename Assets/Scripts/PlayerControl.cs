@@ -31,9 +31,12 @@ public sealed class PlayerControl : NetworkBehaviour
 
     private void Start()
     {
-        var cam = FindObjectOfType<CameraControl>();
-        cam.Parent = transform;
-        cam.enabled = true;
+        if (IsClient && IsOwner)
+        {
+            var cam = FindObjectOfType<CameraControl>();
+            cam.Parent = transform;
+            cam.enabled = true;
+        }
     }
 
     private void Update()
@@ -65,7 +68,7 @@ public sealed class PlayerControl : NetworkBehaviour
     {
         if (networkPlayerPosition.Value != Vector3.zero)
         {
-            _controller.Move(networkPlayerPosition.Value * (Time.deltaTime * speed));
+            _controller.Move(transform.TransformDirection(networkPlayerPosition.Value )* (Time.deltaTime * speed));
         }
     }    
     

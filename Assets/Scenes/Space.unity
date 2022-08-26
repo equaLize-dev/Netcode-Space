@@ -2626,7 +2626,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 40
-  slerpIntensity: 10
+  cameraResetIntensity: 10
+  bodyFollowingIntensity: 10
+  bodyRotationIntensity: 5
   minVerticalAngle: -90
   maxVerticalAngle: 90
 --- !u!114 &1828515375
