@@ -1312,7 +1312,6 @@ GameObject:
   - component: {fileID: 6247058678953210493}
   - component: {fileID: 3569204040738013495}
   - component: {fileID: 2309784723200808556}
-  - component: {fileID: 9040982042508504202}
   m_Layer: 0
   m_Name: Dron DL-3
   m_TagString: Player
@@ -1458,7 +1457,7 @@ MonoBehaviour:
   animationInterpolateMultiplier: 7
   networkPlayerState:
     m_InternalValue: 0
-  networkPositionDirection:
+  networkPlayerPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
 --- !u!114 &2309784723200808556
 MonoBehaviour:
@@ -1470,18 +1469,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec09aeedbd5e4094b576951723f88559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9040982042508504202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7547528765626385950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 001c6a6f87744dde802b48b3402b1efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7972194288378463645
