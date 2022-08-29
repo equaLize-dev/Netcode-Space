@@ -5,14 +5,18 @@ public sealed class PlayerControl : NetworkBehaviour
 {
     [SerializeField] private float speed = 2f;
     [SerializeField] private float animationInterpolateMultiplier = 7f;
+    [SerializeField, Min(0)] private float cameraFollowingIntensity = 5f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
     [SerializeField] private NetworkVariable<Vector3> networkPlayerPosition = new();
+    [SerializeField] private NetworkVariable<Quaternion> networkPlayerRotation = new();
 
     private CharacterController _controller;
+    private Transform _camera;
     private Animator _animator;
     private Vector3 _direction;
     
     private Vector3 _oldInputPosition;
+    private Quaternion _oldInputRotation;
 
     private static readonly int s_VerticalMove = Animator.StringToHash("VerticalMove");
     private static readonly int s_HorizontalMove = Animator.StringToHash("HorizontalMove");
@@ -26,6 +30,17 @@ public sealed class PlayerControl : NetworkBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        if (IsClient && IsOwner)
+        {
+            var cam = FindObjectOfType<CameraControl>();
+            cam.Parent = transform;
+            cam.enabled = true;
+            _camera = cam.gameObject.transform;
+        }
     }
 
     private void Update()
@@ -49,7 +64,13 @@ public sealed class PlayerControl : NetworkBehaviour
             _oldInputPosition = _direction;
             UpdateClientPositionServerRpc(_direction);
         }
-        
+
+        if (_oldInputRotation != _camera.rotation)
+        {
+            _oldInputRotation = _camera.rotation;
+            UpdateClientRotationServerRpc(_camera.rotation);
+        }
+
         UpdatePlayerStateServerRpc(PlayerState.Move);
     }
 
@@ -57,7 +78,11 @@ public sealed class PlayerControl : NetworkBehaviour
     {
         if (networkPlayerPosition.Value != Vector3.zero)
         {
-            _controller.Move(networkPlayerPosition.Value * (Time.deltaTime * speed));
+            _controller.Move(
+                transform.TransformDirection(networkPlayerPosition.Value )* (Time.deltaTime * speed));
+            
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation, networkPlayerRotation.Value, Time.deltaTime * cameraFollowingIntensity);
         }
     }    
     
@@ -93,6 +118,12 @@ public sealed class PlayerControl : NetworkBehaviour
     private void UpdateClientPositionServerRpc(Vector3 newPositionDirection)
     {
         networkPlayerPosition.Value = newPositionDirection;
+    }    
+    
+    [ServerRpc]
+    private void UpdateClientRotationServerRpc(Quaternion newRotation)
+    {
+        networkPlayerRotation.Value = newRotation;
     }
 
     [ServerRpc]

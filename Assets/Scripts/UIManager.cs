@@ -9,18 +9,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startHostButtonObj;
     [SerializeField] private GameObject startServerButtonObj;
     [SerializeField] private GameObject startClientButtonObj;
-    [SerializeField] private TextMeshProUGUI playersInGameText;
-    [SerializeField] private TextMeshProUGUI playerScoreText;
-    [SerializeField] private Button spawnCrystalsButton;
     private Button _startHostButton;
     private Button _startServerButton;
     private Button _startClientButton;
-    private bool _isServerStaretd;
-
-    public void UpdatePlayerScore(int score)
-    {
-        playerScoreText.text = $"Cyber-crystals : {score}";
-    }
 
     private void Awake()
     {
@@ -30,11 +21,6 @@ public class UIManager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    private void Update()
-    {
-        playersInGameText.text = $"Players in game: {PlayersManager.Instance.PlayersInGame}";
-    }
-
     private void Start()
     {
         _startHostButton.onClick.AddListener(() =>
@@ -42,9 +28,6 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartHost())
             {
                 DisableUI();
-                playersInGameText.gameObject.SetActive(true);
-                playerScoreText.gameObject.SetActive(true);
-                _isServerStaretd = true;
                 Debug.Log("Host started...");
             }
 
@@ -59,9 +42,6 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartServer())
             {
                 DisableUI();
-                playersInGameText.gameObject.SetActive(true);
-                playerScoreText.gameObject.SetActive(true);
-                _isServerStaretd = true;
                 Debug.Log("Server started...");
             }
 
@@ -76,23 +56,12 @@ public class UIManager : MonoBehaviour
             if (NetworkManager.Singleton.StartClient())
             {
                 DisableUI();
-                playersInGameText.gameObject.SetActive(true);
-                playerScoreText.gameObject.SetActive(true);
-                _isServerStaretd = true;
                 Debug.Log("Client started...");
             }
 
             else
             {
                 Debug.LogError("Client could not be started...");
-            }
-        });
-        
-        spawnCrystalsButton.onClick.AddListener(() =>
-        {
-            if (_isServerStaretd)
-            {
-                CrystalSpawner.Instance.Spawn();
             }
         });
     }
