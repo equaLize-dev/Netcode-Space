@@ -26,6 +26,9 @@ public sealed class PlayerControl : NetworkBehaviour
         set => networkPlayerPosition.Value = value;
     }
 
+    private bool KeyboardInput => 
+        Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -90,27 +93,21 @@ public sealed class PlayerControl : NetworkBehaviour
     {
         if (networkPlayerState.Value == PlayerState.Move)
         {
-            if (IsClient && IsOwner)
+            float horizontal = 0, vertical = 0;
+
+            if (KeyboardInput)
             {
-                _animator.SetFloat(s_HorizontalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), _direction.x,
-                        Time.deltaTime * animationInterpolateMultiplier));
-                
-                _animator.SetFloat(s_VerticalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), _direction.z,
-                        Time.deltaTime * animationInterpolateMultiplier));
+                horizontal = networkPlayerPosition.Value.x;
+                vertical = networkPlayerPosition.Value.z;
             }
 
-            else
-            {
-                _animator.SetFloat(s_HorizontalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), networkPlayerPosition.Value.x,
-                        Time.deltaTime * animationInterpolateMultiplier));
+            _animator.SetFloat(s_HorizontalMove,
+                Mathf.Lerp(_animator.GetFloat(s_HorizontalMove), horizontal,
+                    Time.deltaTime * animationInterpolateMultiplier));
                 
-                _animator.SetFloat(s_VerticalMove,
-                    Mathf.Lerp(_animator.GetFloat(s_VerticalMove), networkPlayerPosition.Value.z,
-                        Time.deltaTime * animationInterpolateMultiplier));
-            }
+            _animator.SetFloat(s_VerticalMove,
+                Mathf.Lerp(_animator.GetFloat(s_VerticalMove), vertical, 
+                    Time.deltaTime * animationInterpolateMultiplier));
         }
     }
 

@@ -11,6 +11,9 @@ public sealed class CameraControl : MonoBehaviour
     private Transform _parent;
 
     public Transform Parent { set => _parent = value; }
+    
+    private bool KeyboardInput => 
+        Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
 
     private void Start()
     {
@@ -19,7 +22,10 @@ public sealed class CameraControl : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+        transform.position = 
+            Vector3.Lerp(transform.position, _parent.position, Time.deltaTime * bodyFollowingIntensity);
+        
+        if (!KeyboardInput)
         {
             _rotation.x -= Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
             _rotation.y += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
@@ -31,9 +37,6 @@ public sealed class CameraControl : MonoBehaviour
         {
             if (_parent != null)
             {
-                transform.position = 
-                    Vector3.Lerp(transform.position, _parent.position, Time.deltaTime * bodyFollowingIntensity);
-                
                 _rotation.x += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
                 _rotation.y += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
                 transform.rotation = Quaternion.Euler(_rotation.x, _rotation.y, 0);

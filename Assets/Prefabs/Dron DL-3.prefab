@@ -1453,13 +1453,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932d691fb08fd6e46bfb8464e00e2757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentObj: {fileID: 0}
-  speed: 2
+  speed: 4
   animationInterpolateMultiplier: 7
+  cameraFollowingIntensity: 5
   networkPlayerState:
     m_InternalValue: 0
   networkPlayerPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
+  networkPlayerRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &2309784723200808556
 MonoBehaviour:
   m_ObjectHideFlags: 0
