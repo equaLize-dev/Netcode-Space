@@ -5,7 +5,7 @@ public sealed class PlayerControl : NetworkBehaviour
 {
     [SerializeField] private float speed = 2f;
     [SerializeField] private float animationInterpolateMultiplier = 7f;
-    [SerializeField, Min(0)] private float bodyRotationIntensity = 5f;
+    [SerializeField, Min(0)] private float cameraFollowingIntensity = 5f;
     [SerializeField] private NetworkVariable<PlayerState> networkPlayerState = new();
     [SerializeField] private NetworkVariable<Vector3> networkPlayerPosition = new();
     [SerializeField] private NetworkVariable<Quaternion> networkPlayerRotation = new();
@@ -82,8 +82,7 @@ public sealed class PlayerControl : NetworkBehaviour
                 transform.TransformDirection(networkPlayerPosition.Value )* (Time.deltaTime * speed));
             
             transform.rotation = Quaternion.Slerp(
-                transform.rotation, networkPlayerRotation.Value, Time.deltaTime * bodyRotationIntensity);
-            
+                transform.rotation, networkPlayerRotation.Value, Time.deltaTime * cameraFollowingIntensity);
         }
     }    
     

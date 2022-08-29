@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraControl : MonoBehaviour
+public sealed class CameraControl : MonoBehaviour
 {
     [SerializeField, Min(0)] private float sensitivity;
     [SerializeField, Min(0)] private float bodyFollowingIntensity;
