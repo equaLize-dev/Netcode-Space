@@ -15,7 +15,7 @@ public sealed class PlayerControl : NetworkBehaviour
     private Animator _animator;
     private Vector3 _direction;
     
-    private Vector3 _oldInputPosition;
+    private Vector3 _oldInputDirection;
     private Quaternion _oldInputRotation;
 
     private static readonly int s_VerticalMove = Animator.StringToHash("VerticalMove");
@@ -62,13 +62,13 @@ public sealed class PlayerControl : NetworkBehaviour
         _direction.x = Input.GetAxis("Horizontal");
         _direction.z = Input.GetAxis("Vertical");
 
-        if (_oldInputPosition != _direction)
+        if (_oldInputDirection != _direction)
         {
-            _oldInputPosition = _direction;
+            _oldInputDirection = _direction;
             UpdateClientPositionServerRpc(_direction);
         }
 
-        if (_oldInputRotation != _camera.rotation)
+        if (_oldInputRotation != _camera.rotation && KeyboardInput)
         {
             _oldInputRotation = _camera.rotation;
             UpdateClientRotationServerRpc(_camera.rotation);
