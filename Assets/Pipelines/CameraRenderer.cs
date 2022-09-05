@@ -4,7 +4,6 @@ using UnityEngine.Rendering;
 
 public class CameraRenderer
 {
-    private const string BufferName = "Camera Render";
     private static readonly List<ShaderTagId> _drawingShaderTagIds = new() { new ShaderTagId("SRPDefaultUnlit") }; 
     private ScriptableRenderContext _context;
     private CullingResults _cullingResult;
@@ -79,9 +78,9 @@ public class CameraRenderer
     {
         _cullingResult = _context.Cull(ref cullingParameters);
         _context.SetupCameraProperties(_camera);
-        _commandBuffer = new CommandBuffer { name = BufferName };
+        _commandBuffer = new CommandBuffer { name = _camera.name };
         _commandBuffer.ClearRenderTarget(true, true, Color.clear);
-        _commandBuffer.BeginSample(BufferName);
+        _commandBuffer.BeginSample(_camera.name);
         ExecuteCommandBuffer();
     }
     
@@ -94,7 +93,7 @@ public class CameraRenderer
 
     private void Submit()
     {
-        _commandBuffer.EndSample(BufferName);
+        _commandBuffer.EndSample(_camera.name);
         ExecuteCommandBuffer();
         _context.Submit();
     }
