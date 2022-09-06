@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 
 public class CameraRenderer
 {
-    private static readonly List<ShaderTagId> _drawingShaderTagIds = new() { new ShaderTagId("SRPDefaultUnlit") }; 
+    private static readonly List<ShaderTagId> _drawingShaderTagIds = new() { new ShaderTagId("UniversalForwardOnly")}; 
     private ScriptableRenderContext _context;
     private CullingResults _cullingResult;
     private CommandBuffer _commandBuffer;
@@ -36,7 +36,7 @@ public class CameraRenderer
     private void Draw()
     {
         var drawingSettings = SetDrawingSettings(
-            _drawingShaderTagIds, SortingCriteria.CommonOpaque, out var sortingSettings);
+            _drawingShaderTagIds, SortingCriteria.None, out var sortingSettings);
         
         var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
         
@@ -46,7 +46,7 @@ public class CameraRenderer
         sortingSettings.criteria = SortingCriteria.CommonTransparent;
         drawingSettings.sortingSettings = sortingSettings;
         filteringSettings.renderQueueRange = RenderQueueRange.transparent;
-        
+
         _context.DrawRenderers(_cullingResult, ref drawingSettings, ref filteringSettings);
     }
     
