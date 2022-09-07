@@ -1193,6 +1193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1277,6 +1278,26 @@ Transform:
   m_Father: {fileID: 1860675436}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &745363764
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,7 +1568,7 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 7547528765626385950, guid: eba539c54d66536428f64d3071233e7c, type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 672472859986337375, guid: 22047b5dde10fd0428baf2c8ec548242, type: 3}
+      Prefab: {fileID: 7547528765626385950, guid: eba539c54d66536428f64d3071233e7c, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -2147,8 +2168,8 @@ Canvas:
   m_GameObject: {fileID: 1230064732}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1441859805}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2377,7 +2398,7 @@ GameObject:
   - component: {fileID: 1441859805}
   - component: {fileID: 1441859808}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Player Camera
   m_TagString: Camera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2511,6 +2532,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1744273561}
   - component: {fileID: 1744273560}
+  - component: {fileID: 1744273562}
   m_Layer: 0
   m_Name: Directional Light (1)
   m_TagString: Untagged
@@ -2595,6 +2617,26 @@ Transform:
   m_Father: {fileID: 1860675436}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 140, y: -30, z: 0}
+--- !u!114 &1744273562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744273559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1828515373
 GameObject:
   m_ObjectHideFlags: 0
@@ -2626,11 +2668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 40
-  cameraResetIntensity: 10
   bodyFollowingIntensity: 10
-  bodyRotationIntensity: 5
-  minVerticalAngle: -90
-  maxVerticalAngle: 90
 --- !u!114 &1828515375
 MonoBehaviour:
   m_ObjectHideFlags: 0
